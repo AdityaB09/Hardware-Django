@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Product 
 from itertools import chain
+from django.core.paginator import Paginator
  
 
 # Create your views here.
@@ -16,18 +17,37 @@ def index(request):
 
 def product(request, data=None):
     if data == None:
-     products = Product.objects.all()
+     products = Product.objects.all().order_by('id')
+     paginator = Paginator(products, 2)
+     page_number = request.GET.get('page')
+     page_obj = paginator.get_page(page_number)
     elif data == 'mobiles' :
         products = Product.objects.filter(category='M')
+        paginator = Paginator(products, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    
     elif data == 'laptops' :
         products = Product.objects.filter(category='L')
+        paginator = Paginator(products, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     elif data == 'processors' :
         products = Product.objects.filter(category='PR')
+        paginator = Paginator(products, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     elif data == 'below' :
         products = Product.objects.filter(price__lt=250)
+        paginator = Paginator(products, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     elif data == 'above' :
         products = Product.objects.filter(price__gt=250)
-    return render(request, 'product.html',{'products' : products})
+        paginator = Paginator(products, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    return render(request, 'product.html',{'products' : page_obj})
     
 
 def profile(request):
