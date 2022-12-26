@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
-    <title>Settings</title>
+    <title>Profile</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
@@ -63,14 +63,14 @@
                                <label for=""> Last name</label>
                                <input type="text" placeholder="Your name.." name='lastname' value='{{user_profile.last_name}}' class="shadow-none bg-gray-100">
                             </div>
-                            <div class="col-span-2">
+                            {% comment %} <div class="col-span-2">
                                 <label for=""> Email</label>
                                 <input type="text" placeholder="Your name.." class="shadow-none bg-gray-100" value='{{user_profile1.email}}'>
-                            </div>
-                            <div class="col-span-2">
+                            </div> {% endcomment %}
+                            {% comment %} <div class="col-span-2">
                                 <label for="about">Bio</label>  
                                 <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
-                            </div> 
+                            </div>  {% endcomment %}
                             <div class="col-span-2">
                                 <label for=""> Location</label>
                                 <input type="text" name='location' placeholder="" value='{{user_profile.location}}' class="shadow-none bg-gray-100">
