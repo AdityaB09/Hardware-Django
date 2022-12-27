@@ -12,6 +12,8 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('product/', views.product, name='product'),
     path('product/<slug:data>', views.product, name='productdata'),
+    path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
+
     path('passwordchange/', auth_views.PasswordChangeView.as_view(template_name='passwordchange.html', form_class=MyPasswordChangeForm, success_url='/passwordchangedone/' ), name='passwordchange'),
     path('passwordchangedone/', auth_views.PasswordChangeDoneView.as_view(template_name='passwordchangedone.html'), name='passwordchangedone'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='password_reset.html',form_class=MyPasswordResetForm), name='password_reset'),
