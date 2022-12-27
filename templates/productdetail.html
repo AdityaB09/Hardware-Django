@@ -14,10 +14,10 @@
    <h4>Rs. {{product.price}} 
     {% comment %} <small class="fw-light text-decoration-line-through">{{product.price}}</small> {% endcomment %}
    </h4> <br>
-   {% comment %} <form action='/add-to-cart' class='d-inline' > {% endcomment %}
+   <form action='/add-to-cart' class='d-inline' >
    <input type='hidden' name='prod_id' value={{product.id}} id='prod_id'>
    <button type='submit' class='btn btn-primary shadow px-5 py-2'>Add to Cart</button>
-   {% comment %} </form> {% endcomment %}
+   </form> 
    
 
    {% comment %} <a href="{% url 'buy-now' %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}

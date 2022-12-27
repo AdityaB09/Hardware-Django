@@ -14,6 +14,12 @@ urlpatterns = [
     path('product/<slug:data>', views.product, name='productdata'),
     path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
 
+    path('add-to-cart/', views.add_to_cart, name='add-to-cart'),  
+    path('pluscart/',views.plus_cart, name='plus-cart'),   
+    path('minuscart/', views.minus_cart, name='minus-cart'),
+    path('removecart/', views.remove_cart, name='remove-cart'),
+    path('cart/',views.show_cart, name='showcart'),
+
     path('passwordchange/', auth_views.PasswordChangeView.as_view(template_name='passwordchange.html', form_class=MyPasswordChangeForm, success_url='/passwordchangedone/' ), name='passwordchange'),
     path('passwordchangedone/', auth_views.PasswordChangeDoneView.as_view(template_name='passwordchangedone.html'), name='passwordchangedone'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='password_reset.html',form_class=MyPasswordResetForm), name='password_reset'),
