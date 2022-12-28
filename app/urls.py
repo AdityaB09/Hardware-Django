@@ -19,6 +19,7 @@ urlpatterns = [
     path('minuscart/', views.minus_cart, name='minus-cart'),
     path('removecart/', views.remove_cart, name='remove-cart'),
     path('cart/',views.show_cart, name='showcart'),
+    # path('cart/emptycart/', views.empty_cart, name='emptycart'),
 
     path('passwordchange/', auth_views.PasswordChangeView.as_view(template_name='passwordchange.html', form_class=MyPasswordChangeForm, success_url='/passwordchangedone/' ), name='passwordchange'),
     path('passwordchangedone/', auth_views.PasswordChangeDoneView.as_view(template_name='passwordchangedone.html'), name='passwordchangedone'),

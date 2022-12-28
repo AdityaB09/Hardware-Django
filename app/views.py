@@ -27,6 +27,9 @@ def add_to_cart(request):
 
  return redirect('/cart')
 
+def empty_cart(request):
+    return render(request, 'emptycart.html')
+
 
 def show_cart(request) :
     if request.user.is_authenticated :
@@ -45,7 +48,7 @@ def show_cart(request) :
            
             return render(request, 'addtocart.html', {'carts': cart, 'totalamount' : totalamount, 'amount':amount, })
         else :
-            return render (request, 'emptycart.html', )
+            return render (request,'emptycart.html')
 
 
 
@@ -115,30 +118,20 @@ def remove_cart(request):
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == request.user]
         
-   #\/ Not in Project
-   #\/ 
-   #\/
-   #\/
-   #\/
-   #\/
+
     
         if cart_product == None :
             amount = 0.0
             shipping_amount = 00.0
             totalamount = 0.0
-
+            print(len(cart_product))
         else :
 
- #/\ Not in Project
- #/\
- #/\
- #/\
- #/\
- #/\
+
     
          if cart_product :
             for p in cart_product : 
-                tempamount = (p.product.discounted_price * p.quantity)
+                tempamount = (p.product.price * p.quantity)
                 amount += tempamount
                 totalamount = amount + shipping_amount
                 

@@ -8,16 +8,18 @@
   <div class="col-sm-8">
   <div class="card">
    <div class="card-body">
-    
-   {% for cart in carts %}
-    <h3>Cart</h3>
-    <hr>
-    <div class="row">
-      {% if cart.product.product_image %}
-     <div class="col-sm-3 text-center align-self-center"><img src="{{cart.product.product_image.url}}" alt="" srcset="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
-      {% endif %}
-     <div class="col-sm-9">
-      <div>
+   
+     {% for cart in carts %}
+     {% comment %} <h3>Cart</h3>
+     <hr> {% endcomment %}
+     
+     <div class="row cartdata">
+      <hr>
+       {% if cart.product.product_image %}
+         <div class="col-sm-3 text-center align-self-center"><img src="{{cart.product.product_image.url}}" alt="" srcset="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
+        {% endif %}
+        <div class="col-sm-9">
+           <div>
        <h5>{{cart.product.title}}</h5>
        <p class="mb-2 text-muted small">{{cart.product.description}}</p>
        <div class="my-3">
@@ -27,16 +29,20 @@
         <a class="plus-cart btn" pid={{cart.product.id}}><i class="fas fa-plus-square fa-lg" ></i></a>
        </div> 
        <div class="d-flex justify-content-between">
-        <a href="#" class="btn btn-sm btn-secondary mr-3 remove-cart" pid="{{cart.product.id}}" >Remove item </a>
+        <a href="#" class="btn btn-sm btn-secondary mr-3 remove-cart " pid="{{cart.product.id}}" >Remove item </a>
         <p class="mb-0"><span><strong>Rs. {{cart.product.price}}</strong></span></p>
        </div>
       </div>
      </div>
     </div>
     {% endfor %}
-  
 
-  <div class="col-sm-4">
+
+
+
+
+
+   <div class="col-sm-4">
    <div class="card">
     <div class="card-body">
       <h3>The Total Amount of</h3>
