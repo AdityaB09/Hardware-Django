@@ -22,7 +22,18 @@
 <body>
 
             <header>
+                <form action='/search' method='get'>
+                    {% csrf_token %}
+                <div class="left-side">
+
+                <input type="text" name='title' id='title' placeholder="Search for Products..">&nbsp; &nbsp;
+                            <button type='submit'><i class='fa fa-search fa-1x'></i></button>
+                        
+
+                    </div>
+                </form>
                 
+
                         <!-- profile -->
                        {% if user_profile.profileimg %}
                         <a href="#">

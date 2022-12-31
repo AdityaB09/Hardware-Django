@@ -20,7 +20,8 @@ urlpatterns = [
     path('removecart/', views.remove_cart, name='remove-cart'),
     path('cart/',views.show_cart, name='showcart'),
     # path('cart/emptycart/', views.empty_cart, name='emptycart'),
-
+ 
+    path('search', views.search, name='search'),
 
     path('address/', views.address, name='address'),
     path('orders/', views.orders, name='orders'),

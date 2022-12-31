@@ -24,6 +24,27 @@ def index(request):
     return render(request, 'index.html', { 'user_profile': user_profile,})
 
 
+
+def search(request):
+
+    
+    user_object = User.objects.get(username = request.user.username)
+    user_profile = Profile.objects.get(user = user_object)
+    query = request.GET['title']
+        
+    if len(query) > 51 :
+            queryAll = Product.objects.none()
+    else :
+            allTitle = Product.objects.filter(title__icontains=query)
+            allDesc = Product.objects.filter(description__icontains=query)
+            #allManual = Product.objects.filter(manual__icontains=query)
+            queryAll = allTitle | allDesc # | allManual 
+    if queryAll.count() == 0:
+            messages.warning(request, "No product found")
+            
+    return render(request, 'search.html', {'user_profile' : user_profile, "queryAll" : queryAll,})
+
+
 #@login_required
 def address(request):
  add = Profile.objects.filter(user=request.user)
@@ -36,8 +57,9 @@ def address(request):
 def orders(request):  
      totalitem = 0
      op = OrderPlaced.objects.filter(user=request.user)
-     totalitem = len(Cart.objects.filter(user=request.user))
-     print(op)
+     if request.user.is_authenticated:
+      totalitem = len(Cart.objects.filter(user=request.user))
+     #print(op)
      return render(request, 'orders.html', {'order_placed':op, 'totalitem':totalitem,})
 
 
