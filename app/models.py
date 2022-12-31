@@ -6,11 +6,54 @@ from datetime import date
 User = get_user_model()
 # Create your models here.
 
+
+STATE_CHOICES = (
+('Andaman & Nicobar Islands','Andaman & Nicobar Islands'),
+('Andhra Pradesh', 'Andhra Pradesh'),
+('Arunachal Pradesh','Arunachal Pradesh'),
+('Assam','Assam'),
+('Bihar','Bihar'),
+('Chandigarh','Chandigarh'),
+('Chattisgarh','Chattisgarh'),
+('Dadra & Nagar Haveli','Dadra & Nagar Haveli'),
+('Daman & Diu','Daman & Diu'),
+('Delhi','Delhi'),
+('Goa','Goa'),
+('Gujarat','Gujarat'),
+('Haryana','Haryana'),
+('Himachal Pradesh','Himachal Pradesh'),
+('Jammu & Kashmir','Jammu & Kashmir'),
+('Karnataka','Karnataka'),
+('Kerala','Kerala'),
+('Lakshwadeep','Lakshwadeep'),
+('Madhya Pradesh','Madhya Pradesh'),
+('Maharashtra','Maharashtra'),
+('Manipur','Manipur'),
+('Meghalaya','Meghalaya'),
+('Mizoram','Mizoram'),
+('Nagaland','Nagaland'),
+('Odisha','Odisha'),
+('Puducherry','Puducherry'),
+('Punjab','Punjab'),
+('Rajasthan','Rajasthan'),
+('Sikkim','Sikkim'),
+('Tamil Nadu','Tamil Nadu'),
+('Telangana','Telangana'),
+('Tripura','Tripura'),
+('Uttarakhand','Uttarakhand'),
+('Uttar Pradesh','Uttar Pradesh'),
+('West Bengal','West Bengal'),
+)
+
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    id_user =  models.IntegerField()
     profileimg = models.ImageField(upload_to='profile_images',default='about-comapny.jpg')
-    location = models.CharField(max_length=101,blank=True)
+
+    address = models.CharField(max_length=1000, blank=True)
+    locality = models.CharField(max_length=101,blank=True)
+    city = models.CharField(max_length=101,blank=True)
+    state = models.CharField(choices = STATE_CHOICES, max_length=55)
+    pincode = models.IntegerField()
 
     first_name = models.TextField(blank=True)
     last_name = models.TextField(blank=True)
@@ -45,3 +88,26 @@ class Cart(models.Model):
 
     def __str__(self) :
      return str(self.id)
+
+    @property
+    def total_cost(self):
+      return ( self.quantity * self.product.price)
+
+STATUS_CHOICES = (
+    ('Accepted','Accepted'),
+    ('Packed', 'Packed'),
+    ('On The Way','On The Way'),
+    ('Delivered','Delivered'),
+    ('Cancel','Cancel'),
+)
+
+class OrderPlaced(models.Model) :
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
+
+    def __str__(self):
+        return str(self.user)

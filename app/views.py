@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User, auth, AnonymousUser
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Product, Cart 
+from .models import Profile, Product, Cart, OrderPlaced
 from itertools import chain
 from django.core.paginator import Paginator
 from django.views import View
@@ -14,9 +14,59 @@ from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
-    user_object = User.objects.get(username=request.user.username)
-    user_profile = Profile.objects.get(user = user_object)
+    try:
+     user_object = User.objects.get(username=request.user.username)
+     user_profile = Profile.objects.get(user = user_object)
+    except User.DoesNotExist:
+     user_profile = AnonymousUser()
+    # user_object = User.objects.get(username=request.user.username)
+    # user_profile = Profile.objects.get(user = user_object)
     return render(request, 'index.html', { 'user_profile': user_profile,})
+
+
+#@login_required
+def address(request):
+ add = Profile.objects.filter(user=request.user)
+ totalitem = 0
+ if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
+ return render(request, 'address.html', {'add':add, 'totalitem':totalitem,})
+
+#@login_required
+def orders(request):  
+     totalitem = 0
+     op = OrderPlaced.objects.filter(user=request.user)
+     totalitem = len(Cart.objects.filter(user=request.user))
+     print(op)
+     return render(request, 'orders.html', {'order_placed':op, 'totalitem':totalitem,})
+
+
+def checkout(request):
+    user= request.user
+    add = Profile.objects.filter(user=user)
+    cart_items = Cart.objects.filter(user=user)
+    amount = 0.0
+    shipping_amount = 10.0
+    totalamount = 0.0
+    cart_product = [p for p in Cart.objects.all() if p.user == request.user]
+
+    if cart_product :
+            for p in cart_product : 
+                tempamount = (p.product.price * p.quantity)
+                amount += tempamount
+            totalamount = amount +shipping_amount
+    return render(request, 'checkout.html', {'add':add, 'totalamount':totalamount, 'cart_items':cart_items})
+
+
+def payment_done(request):
+    user = request.user
+    custid = request.GET.get('custid')
+    profile = Profile.objects.get(id=custid)
+    cart = Cart.objects.filter(user=user)
+    for c in cart :
+        OrderPlaced(user=user, profile=profile, product=c.product, quantity=c.quantity).save()
+        c.delete()
+    return redirect('orders')
 
 
 def add_to_cart(request):
@@ -36,7 +86,7 @@ def show_cart(request) :
         user = request.user
         cart = Cart.objects.filter(user=user)
         amount = 0.0
-        shipping_amount = 70.0
+        shipping_amount = 10.0
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == user]
        
@@ -60,7 +110,7 @@ def plus_cart(request):
         c.save()
         
         amount = 0.0
-        shipping_amount = 70.0
+        shipping_amount = 10.0
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == request.user]
       
@@ -86,7 +136,7 @@ def minus_cart(request):
         c.save()
         
         amount = 0.0
-        shipping_amount = 70.0
+        shipping_amount = 10.0
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == request.user]
       
@@ -114,7 +164,7 @@ def remove_cart(request):
         
         
         amount = 0.0
-        shipping_amount = 70.0
+        shipping_amount = 10.0
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == request.user]
         
@@ -184,48 +234,70 @@ def profile(request):
     #user_profile1 = User.objects.get(email=request.user.email)
     if request.method == 'POST' :
         if request.FILES.get('image') == None :
+            #  if request.POST.get('birthdate1') == None :
+            #     birthdate1 =  
+             address = request.POST.get('address')
+             city = request.POST.get('city')
+             #state = request.POST.get('state')
+             pincode = request.POST.get('pincode')
              image = user_profile.profileimg
              #bio = request.POST['bio']
-             location = request.POST['location']
+             locality = request.POST['locality']
              
              first_name = request.POST['firstname']
              last_name = request.POST['lastname']
-          #   birthdate = request.POST['birthdate']
+             birthdate = request.POST.get('birthdate')
              mobileno = request.POST['mobileno']
           #   email = user_profile1.email
              
 
+             user_profile.address = address
+             user_profile.city = city
+             #user_profile.state = state
+             user_profile.pincode = pincode
+             user_profile.locality = locality
+
 
              user_profile.profileimg = image
              #user_profile.bio = bio
-             user_profile.location = location
+             #user_profile.city = city
              user_profile.first_name = first_name
              user_profile.last_name = last_name
-         #    user_profile.birth_date = birthdate
+             user_profile.birth_date = birthdate
              user_profile.mobile_no = mobileno
-        #     user_profile1.email = email
+             #user_profile1.email = email
              
 
              user_profile.save()
     if request.FILES.get('image') != None :
         image = request.FILES.get('image')
         #bio = request.POST['bio']
-        location = request.POST['location']
-                      
+        locality = request.POST['locality']
+
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        #state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+
         first_name = request.POST['firstname']
         last_name = request.POST['lastname']
-        #birthdate = request.POST['birthdate']
+        birthdate = request.POST['birthdate']
         mobileno = request.POST['mobileno']
         #email = request.POST['email']
-
+ 
+        user_profile.address = address
+        user_profile.city = city
+        #user_profile.state = state
+        user_profile.pincode = pincode
+        user_profile.locality = locality
 
         user_profile.profileimg = image
         #user_profile.bio = bio
-        user_profile.location = location
+        user_profile.city = city
 
         user_profile.first_name = first_name
         user_profile.last_name = last_name
-        # user_profile.birth_date = birthdate
+        user_profile.birth_date = birthdate
         user_profile.mobile_no = mobileno
         #user_profile1.email = email
         

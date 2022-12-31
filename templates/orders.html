@@ -26,7 +26,7 @@
     font-size: 15px;
 }
 </style>
-    <title>ShoppingX | {% block title %} {% endblock title %} </title>
+    <title>ShoppingX | Orders </title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -97,17 +97,63 @@
     </nav>
 <div class="container my-5">
  <div class="row">
-  <h3 class="text-center">You Have no products in Carts</h3>
-  <div class="text-center">
-    {% comment %} <img src="{% static 'app/images/emptycart.png' %}" class="img-fluid img-thumbnail w-25"> {% endcomment %}
-     EMPTY CART
+ <h3>Welcome {{request.user}}</h3>
+  <div class="col-sm-2 border-end">
+   <ul class="list-unstyled">
+    <li class="d-grid"><a href="{% url 'orders' %}" class="btn btn-primary">Orders</a></li>
+   </ul>
   </div>
+  <div class="col-sm-9 offset-sm-1">
+    {% for op in order_placed %}
+   <div class="row shadow-sm mb-3">
+    <div class="col-sm-2">
+        <img src="{{op.product.product_image.url}}" class="img-fluid" height="150" width="150">
+
+    </div>
+    <div class="col-sm-7">
+        <p> Product : {{op.product.title}}</p>   
+        <p>Quantity : {{op.quantity}}</p>
+        <p>Price : {{op.total_cost}}</p>
+    </div>
+<div class="col-sm-3 fw-bold">
+    <p> Order Status : {{op.status}}</p>
+    {% if op.status == 'Accepted'%}
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuenow='20' style="width:20%" aria-valuemax="100">
+        </div>
+    </div>
+    {%endif%}
+
+    {% if op.status == 'Packed'%}
+    <div class="progress">
+        <div class="progress-bar bg-info" role="progressbar" aria-valuemin="0" aria-valuenow='40' style="width:40%" aria-valuemax="100">
+        </div>
+    </div>
+    {%endif%}
+
+    {% if op.status == 'On the Way'%}
+    <div class="progress">
+        <div class="progress-bar bg-warning" role="progressbar" aria-valuemin="0" aria-valuenow='70' style="width:70%" aria-valuemax="100">
+        </div>
+    </div>
+    {%endif%}
+
+    {% if op.status == 'Delivered'%}
+    <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuenow='100' style="width:100%" aria-valuemax="100">
+        </div>
+    </div>
+    {%endif%}
+
+    </div>
+   </div>
+   {% endfor%}
   </div>
  </div>
 </div>
 <footer class="container-fluid bg-dark text-center p-2 mt-5">
- 
-  {% comment %} <img src="{% static 'app/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> {% endcomment %}
+    <small class="text-white">Copyright &copy; 2021 || Designed By GeekyShows || </small>
+    {% comment %} <img src="{% static 'app/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> {% endcomment %}
 </footer> <!-- End Footer -->
 
 <!-- Jquery -->

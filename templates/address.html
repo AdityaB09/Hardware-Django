@@ -26,7 +26,7 @@
     font-size: 15px;
 }
 </style>
-    <title>ShoppingX | {% block title %} {% endblock title %} </title>
+    <title>ShoppingX | Address </title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -97,17 +97,36 @@
     </nav>
 <div class="container my-5">
  <div class="row">
-  <h3 class="text-center">You Have no products in Carts</h3>
-  <div class="text-center">
-    {% comment %} <img src="{% static 'app/images/emptycart.png' %}" class="img-fluid img-thumbnail w-25"> {% endcomment %}
-     EMPTY CART
+ <h3>Welcome <span class='text-capitalize'> {{request.user}}</span></h3>
+  <div class="col-sm-2 border-end">
+   <ul class="list-unstyled">
+    <li class="d-grid"><a href="{% url 'profile' %}" class="btn ">Profile</a></li>
+    <li class="d-grid"><a href="{% url 'address' %}" class="btn {{active}}">Address</a></li>
+   </ul>
   </div>
+  <div class="col-sm-9 offset-sm-1">
+   <div class="row">
+    {% for ad in add %}
+    <div class="col-sm-6">
+     <div class="card">
+      <div class="card-body">
+       <h3>Address {{forloop.counter}} </h3>
+       <p>Name: {{ad.name}}</p>
+       <p>Locality : {{ad.locality}} </p>
+       <p>City : {{ad.city}}</p>
+       <p>Pincode: {{ad.zipcode}}</p>
+       <p>State:   {{ad.state}}</p>
+      </div>
+     </div>
+    </div>
+    {% endfor %}
+   </div>
   </div>
  </div>
 </div>
 <footer class="container-fluid bg-dark text-center p-2 mt-5">
- 
-  {% comment %} <img src="{% static 'app/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> {% endcomment %}
+    <small class="text-white">Copyright &copy; 2021 || Designed By GeekyShows || </small>
+    {% comment %} <img src="{% static 'app/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> {% endcomment %}
 </footer> <!-- End Footer -->
 
 <!-- Jquery -->
