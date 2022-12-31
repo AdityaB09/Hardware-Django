@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, auth, AnonymousUser
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Product, Cart, OrderPlaced
+from .models import Profile, Product, Cart, OrderPlaced, ContactUser
 from itertools import chain
 from django.core.paginator import Paginator
 from django.views import View
@@ -24,12 +24,28 @@ def index(request):
     return render(request, 'index.html', { 'user_profile': user_profile,})
 
 
-
-def search(request):
-
-    
+def contactus(request):
+    user = request.user
+    email = request.user.email
     user_object = User.objects.get(username = request.user.username)
     user_profile = Profile.objects.get(user = user_object)
+    mobileno = user_profile.mobile_no
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+
+        ContactUser(user=user, email=email, profile=user_profile, mobileno = mobileno, title=title, description=description).save()
+
+    return render(request, 'contactus.html',{'user_profile':user_profile, "user_object" :user_object })
+
+
+def search(request):   
+    user_object = User.objects.get(username = request.user.username)
+    user_profile = Profile.objects.get(user = user_object)
+    # email = request.user.email
+    print(user_profile.mobile_no)
+    #print(user_profile.last_name)
+    print(user_object.email)
     query = request.GET['title']
         
     if len(query) > 51 :
@@ -268,7 +284,7 @@ def profile(request):
              
              first_name = request.POST['firstname']
              last_name = request.POST['lastname']
-             birthdate = request.POST.get('birthdate')
+             birthdate = request.POST['birthdate']
              mobileno = request.POST['mobileno']
           #   email = user_profile1.email
              
@@ -291,6 +307,7 @@ def profile(request):
              
 
              user_profile.save()
+             return redirect('/')
     if request.FILES.get('image') != None :
         image = request.FILES.get('image')
         #bio = request.POST['bio']

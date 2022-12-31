@@ -73,8 +73,8 @@
                             </div>  {% endcomment %}
                             <div class="col-span-2">
                                 <label for="">Birth Date</label>
-                                 <input type="text" name='birthdate' placeholder="" value='{{user_profile.birth_date |date:"Y-m-d"}}' class="shadow-none bg-gray-100"> 
-                                {% comment %} <input type="date" name='birthdate' placeholder="" value='{{user_profile.birth_date|date:"Y-m-d"}}' class="shadow-none bg-gray-100"> {% endcomment %}
+                                 {% comment %} <input type="text" name='birthdate' placeholder="" value='{{user_profile.birth_date | date:"Y-m-d"}}' class="shadow-none bg-gray-100">  {% endcomment %}
+                                <input type="date" name='birthdate' placeholder="" value='{{user_profile.birth_date|date:"Y-m-d"}}' class="shadow-none bg-gray-100">
                             </div>
                             <div class="col-span-2">
                                 <label for=""> Address </label>

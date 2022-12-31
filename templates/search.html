@@ -19,22 +19,16 @@
 </head>
 
 <body>
-            <form action="search" method="POST">
-            {% csrf_token %}
-            <header style="margin-top: -23px;">
-                <div class="header_inner">
-                    <div class="left-side">
-                        <!-- Logo -->
-                       
+    <form action='/search' method='get'>
+        {% csrf_token %}
+    <div class="left-side">
 
-                        <!--<div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
-                            <i class="uil-bars"></i>
-                        </div>-->
+    <input type="text" name='title' id='title' placeholder="Search for Products..">&nbsp; &nbsp;
+                <button type='submit'><i class='fa fa-search fa-1x'></i></button>
+            
 
-                        <!-- <div class="header_search"> -->
-                            
-                                <input type="text" name="title" id='title' placeholder="Search for Products..">&nbsp; &nbsp;
-                                <button type="submit"><i class="fa fa-search fa-1x"></i></button>
+        </div>
+    </form>
                             
                     
 

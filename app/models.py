@@ -48,12 +48,12 @@ STATE_CHOICES = (
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profileimg = models.ImageField(upload_to='profile_images',default='about-comapny.jpg')
-
+    id_user =  models.IntegerField()
     address = models.CharField(max_length=1000, blank=True)
     locality = models.CharField(max_length=101,blank=True)
     city = models.CharField(max_length=101,blank=True)
     state = models.CharField(choices = STATE_CHOICES, max_length=55)
-    pincode = models.IntegerField()
+    pincode = models.IntegerField(default=400600)
 
     first_name = models.TextField(blank=True)
     last_name = models.TextField(blank=True)
@@ -61,7 +61,7 @@ class Profile(models.Model):
     mobile_no = models.IntegerField(default='9999999999')
 
     def __str__(self) :
-        return self.user.username
+        return (self.first_name)
 
 CATEGORY_CHOICES = (
     ('M','Mobiles'),
@@ -79,15 +79,15 @@ class Product(models.Model) :
 
     def __str__(self):
         #return str(self.user)
-        return str(self.id)
+        return str(self.title)
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product =  models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
-    def __str__(self) :
-     return str(self.id)
+    # def __str__(self) :
+    #  return str(self.)
 
     @property
     def total_cost(self):
@@ -109,5 +109,20 @@ class OrderPlaced(models.Model) :
     ordered_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
 
-    def __str__(self):
-        return str(self.user)
+    # def __str__(self):
+    #     return str(self.id)
+
+class ContactUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    #product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
+
+    mobileno = models.IntegerField()
+    email = models.EmailField()
+    title = models.CharField(max_length= 100)
+    description = models.CharField(max_length=2000)
+
+    # def __str__(self):
+    #     return str(self.id)
+
