@@ -46,6 +46,8 @@ STATE_CHOICES = (
 )
 
 class Profile(models.Model):
+
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profileimg = models.ImageField(upload_to='profile_images',default='about-comapny.jpg')
     id_user =  models.IntegerField()
@@ -54,6 +56,9 @@ class Profile(models.Model):
     city = models.CharField(max_length=101,blank=True)
     state = models.CharField(choices = STATE_CHOICES, max_length=55)
     pincode = models.IntegerField(default=400600)
+
+    auth_token = models.CharField(max_length=100)
+    is_verified = models.BooleanField(default=False)
 
     first_name = models.TextField(blank=True)
     last_name = models.TextField(blank=True)

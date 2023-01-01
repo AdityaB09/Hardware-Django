@@ -7,7 +7,9 @@ from django.urls import reverse
 # Register your models here.
 @admin.register(Profile)
 class ProfileModelAdmin(admin.ModelAdmin):
-    list_display = ["id","user", 
+    list_display = ["id","user",
+    'auth_token',
+    'is_verified',
     "profileimg" ,
     'address' ,
     'locality' ,

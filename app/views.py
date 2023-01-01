@@ -10,6 +10,9 @@ from django.views import View
 from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse
+from django.conf import settings
+from django.core.mail import send_mail
+import uuid
  
 
 # Create your views here.
@@ -22,6 +25,7 @@ def index(request):
     # user_object = User.objects.get(username=request.user.username)
     # user_profile = Profile.objects.get(user = user_object)
     return render(request, 'index.html', { 'user_profile': user_profile,})
+
 
 
 def contactus(request):
@@ -117,6 +121,7 @@ def add_to_cart(request):
 
 def empty_cart(request):
     return render(request, 'emptycart.html')
+
 
 
 def show_cart(request) :
@@ -352,8 +357,8 @@ def signup(request):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-
-        if password1 == password2:
+        try:
+         if password1 == password2:
             if User.objects.filter(email=email).exists():
                 messages.info(request, 'Email Taken')
                 return redirect('signup')
@@ -368,14 +373,19 @@ def signup(request):
                 auth.login(request, user_login)
 
                 user_model = User.objects.get(username=username)
-                new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
+                auth_token = str(uuid.uuid4())
+                new_profile = Profile.objects.create(user=user_model, id_user=user_model.id, auth_token= auth_token) 
                 new_profile.save()
-                return redirect('profile')
-        else:
+                return redirect('/token')
+        
+         else:
             messages.info(request, 'Password Not Matching')
             return redirect('signup')
+        except Exception as e:
+            print(e)
     else:
         return render(request,'signup.html')
+
 
 def signin(request):
     
@@ -403,3 +413,41 @@ class ProductDetailView(View) :
     def get(self, request, pk):
         product = Product.objects.get(pk=pk)
         return render(request, 'productdetail.html', {'product': product})
+
+
+def success(request):
+    return render(request,'success.html')
+
+def token_send(request):
+    return render(request,'token_send.html')
+
+def sendmail(email,token):
+    subject = 'Your account has been verified.'
+    message = f'Hi Paste the link to verify your account http://127.0.0.1:8000/verify/{token}' 
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject, message, email_from, recipient_list)
+
+
+def verify(request, auth_token):
+    try :
+        profile_obj = Profile.objects.filter(auth_token = auth_token).first()
+        
+        if profile_obj:
+            
+            if profile_obj.is_verified:
+                messages.success(request, 'Your Account is Already Verified')
+                return redirect('signin')
+            profile_obj.is_verified = True
+            profile_obj.save()
+            messages.success(request, 'Profile updated and Verified')
+            return redirect('signin')
+        else :
+            return redirect('/error')
+    except Exception as e :
+        print(e)
+
+def error_page(request):
+    return render(request, 'error.html')
+        
+

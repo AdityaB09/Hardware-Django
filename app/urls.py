@@ -1,11 +1,19 @@
 from django.urls import path
 from . import views
+from .views import *
 # from django.conf import settings
 # from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from  .forms import MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
 urlpatterns = [
     path('',views.index, name = "index" ),
+
+    path('token', token_send , name = "token"),
+    path('success', success , name = "success"),
+    path('verify/<auth_token>',verify, name = "verify"),
+    path('error', error_page , name = "error"),
+
+
     path('signup', views.signup, name='signup'),
     path('signin', views.signin, name='signin'),
     path('profile', views.profile, name='profile'),
