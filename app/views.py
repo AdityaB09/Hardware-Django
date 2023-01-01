@@ -369,13 +369,14 @@ def signup(request):
                 user = User.objects.create_user(username=username, email=email, password=password1)
                 user.save()
 
-                user_login = auth.authenticate(username=username, password=password1)
-                auth.login(request, user_login)
+                # user_login = auth.authenticate(username=username, password=password1)
+                # auth.login(request, user_login)
 
                 user_model = User.objects.get(username=username)
                 auth_token = str(uuid.uuid4())
                 new_profile = Profile.objects.create(user=user_model, id_user=user_model.id, auth_token= auth_token) 
                 new_profile.save()
+                sendmail(email, auth_token)
                 return redirect('/token')
         
          else:
@@ -392,10 +393,13 @@ def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-
+        # profile_obj = Profile.objects.filter(user=user)
+        user_obj = User.objects.filter(username=username).first()
         user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
+        profile_obj = Profile.objects.filter(user=user_obj).first()
+        print(profile_obj.is_verified)
+        if profile_obj.is_verified :
+         if user is not None:
             auth.login(request, user)
             return redirect('/')
         else:
@@ -446,6 +450,7 @@ def verify(request, auth_token):
             return redirect('/error')
     except Exception as e :
         print(e)
+        return redirect('signin')
 
 def error_page(request):
     return render(request, 'error.html')
