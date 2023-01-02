@@ -62,7 +62,7 @@ def search(request):
     if queryAll.count() == 0:
             messages.warning(request, "No product found")
             
-    return render(request, 'search.html', {'user_profile' : user_profile, "queryAll" : queryAll,})
+    return render(request, 'search.html', {'user_profile' : user_profile, "queryAll" : queryAll, "query": query,})
 
 
 #@login_required
@@ -358,6 +358,13 @@ def signup(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         try:
+         if username == '' :
+             messages.warning(request,"No Username provided")
+             return redirect('signup')
+         if email == "" :
+            messages.warning(request,"No Email Address provided")
+            return redirect('signup')
+
          if password1 == password2:
             if User.objects.filter(email=email).exists():
                 messages.info(request, 'Email Taken')
@@ -397,11 +404,18 @@ def signin(request):
         user_obj = User.objects.filter(username=username).first()
         user = auth.authenticate(username=username, password=password)
         profile_obj = Profile.objects.filter(user=user_obj).first()
-        print(profile_obj.is_verified)
+        #print(profile_obj.is_verified)
+        if not profile_obj :
+         messages.info(request, 'Profile is not verified')
+         return redirect('signin')   
+
         if profile_obj.is_verified :
-         if user is not None:
+          if user is not None:
             auth.login(request, user)
             return redirect('/')
+          else:
+            messages.info(request, 'User Not Found')
+            return redirect('signin')
         else:
             messages.info(request, 'Credentials Invalid')
             return redirect('signin')

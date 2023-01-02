@@ -13,12 +13,16 @@
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> {% endcomment %}
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
 <body class="bg-gray-100">
 
-                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                    {% comment %} <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                    
 
                     <div>
@@ -62,7 +66,63 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> {% endcomment %}
+
+      
+      <div class="container-sm  mx-auto" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true" >
+        <div class="card mx-auto" style="width:600px;margin-top:115px;" >
+          <div class="card-body" >
+        <div class="row mt-4" role="document">
+          <div class="col-md-10 mx-auto ">
+            <div class="header">
+              <h5 class="title" id="exampleModalLabel">Login to HardwareWebsite</h5>
+              
+                
+            
+            <div class="body">
+              {% if messages %}
+                {% for message in messages%}
+                <p {% if message.tags %} class = "alert alert-{{message.tags}} mb-0" {% endif %}>  {{message}}</p>
+                {% endfor %}   
+                {% endif %}
+            
+              <form action="" method="POST" >
+                {% csrf_token %}
+                    <div class="form-group" >
+                      <label for="exampleInputEmail1">Username</label>
+                      <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                      {% comment %} <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> {% endcomment %}
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Password</label>
+                      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <small id="emailHelp" class="form-text text-muted" style="margin-left:340px;"><a href="{% url "password_reset" %}" class="text-black-20 fw-bold" style="color : grey; ">Forgot Password?</a>
+                    </small>
+                    <p>
+                    <small id="emailHelp" class="form-text text-muted">Don't have an account? <a href="{% url "signup" %}" class="text-black-20 fw-bold" style="color : grey; ">Sign Up</a>
+                    </small></p>
+                    <button type="submit" class="btn btn-primary text-center" style="margin-left:200px;" >Login</button>
+                  </form>
+            </div>
+            
+          </div>
+        </div>
+       </div>
+      </div>
+      </div>
+       
+   <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 
 

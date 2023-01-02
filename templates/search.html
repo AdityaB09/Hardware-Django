@@ -171,8 +171,13 @@
                         </ul> -->
                      </div>
                      <div class="col-md-9 col-md-pull-3">
-                        <!-- <p class="search-results-count">About 94 700 000 (0.39 sec.) results</p> -->
                         
+                        {%if queryAll|length < 1 %}
+                        <div class="row">
+                            No results found
+                        </div>
+                        {% else %}
+
                         {% for qr in queryAll %}
                         <section class="search-result-item">
                             <a class="image-link" href="{% url 'product-detail' qr.id %}"><img class="image" src="{{qr.product_image.url}}">
@@ -184,34 +189,13 @@
                                         <p class="info">{{qr.category}}</p>
                                         <p class="description">{{qr.description}}</p>
                                     </div>
-                                    <!-- <div class="col-sm-3 text-align-center">
-                                        <p class="value3 mt-sm">$9, 700</p>
-                                        <p class="fs-mini text-muted">PER WEEK</p><a class="btn btn-primary btn-info btn-sm" href="#">Learn More</a>
-                                    </div> -->
+                                   
                                 </div>
                             </div>
                         </section>
                         {% endfor %}
-                        
-                        <!-- <div class="text-align-center">
-                            <ul class="pagination pagination-sm">
-                                <li class="disabled"><a href="#">Prev</a>
-                                </li>
-                                <li class="active"><a href="#">1</a>
-                                </li>
-                                <li><a href="#">2</a>
-                                </li>
-                                <li><a href="#">3</a>
-                                </li>
-                                <li><a href="#">4</a>
-                                </li>
-                                <li><a href="#">5</a>
-                                </li>
-                                <li><a href="#">Next</a>
-                                </li>
-                            </ul>
-                        </div> -->
-                    </div>
+                       {% endif %} 
+                       
                 </div>
                 </div>
             </div>
@@ -225,8 +209,6 @@
 
 
 
- <!-- Scripts
-    ================================================== -->
     <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
     <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'assets/js/uikit.js' %}"></script>
