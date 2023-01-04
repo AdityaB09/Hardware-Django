@@ -68,10 +68,12 @@ def search(request):
 #@login_required
 def address(request):
  add = Profile.objects.filter(user=request.user)
+ user_object = User.objects.get(username=request.user.username)
+ user_profile = Profile.objects.get(user = user_object)
  totalitem = 0
  if request.user.is_authenticated:
             totalitem = len(Cart.objects.filter(user=request.user))
- return render(request, 'address.html', {'add':add, 'totalitem':totalitem,})
+ return render(request, 'address.html', {'add':add, 'totalitem':totalitem, 'user_profile':user_profile,})
 
 #@login_required
 def orders(request):  
@@ -359,6 +361,7 @@ def signup(request):
         password2 = request.POST['password2']
         try:
          if username == '' :
+            # messages.success(request, "We've sent you an Email Please Check your Email Address")
              messages.warning(request,"No Username provided")
              return redirect('signup')
          if email == "" :
@@ -384,7 +387,8 @@ def signup(request):
                 new_profile = Profile.objects.create(user=user_model, id_user=user_model.id, auth_token= auth_token) 
                 new_profile.save()
                 sendmail(email, auth_token)
-                return redirect('/token')
+                messages.success(request, "We've sent you an Email to verify your Email Address")
+                return redirect('signup')
         
          else:
             messages.info(request, 'Password Not Matching')

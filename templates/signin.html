@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Bootstrap CSS -->
+    <style type="text/css">
+      a {
+         text-decoration:none;
+      }
+    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
@@ -97,10 +102,10 @@
                       <label for="exampleInputPassword1">Password</label>
                       <input type="password" name="password" class="form-control" id="exampleInputPassword1">
                     </div>
-                    <small id="emailHelp" class="form-text text-muted" style="margin-left:340px;"><a href="{% url "password_reset" %}" class="text-black-20 fw-bold" style="color : grey; ">Forgot Password?</a>
+                    <small id="emailHelp" class="form-text text-muted" style="margin-left:340px;"><a href="{% url "password_reset" %}" class="text-black-20 fw-bold" style="color : grey; text-decoration:none;">Forgot Password?</a>
                     </small>
                     <p>
-                    <small id="emailHelp" class="form-text text-muted">Don't have an account? <a href="{% url "signup" %}" class="text-black-20 fw-bold" style="color : grey; ">Sign Up</a>
+                    <small id="emailHelp" class="form-text text-muted"><a href="{% url "signup" %}" class="text-black-20" style="color : grey; text-decoration:none; ">  Don't have an account? <a class="text-black-20 fw-bold" style="color : grey; text-decoration:none; " href="{% url "signup" %}"> Sign Up</a>
                     </small></p>
                     <button type="submit" class="btn btn-primary text-center" style="margin-left:200px;" >Login</button>
                   </form>
