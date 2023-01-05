@@ -26,7 +26,8 @@ def index(request):
     # user_profile = Profile.objects.get(user = user_object)
     return render(request, 'index.html', { 'user_profile': user_profile,})
 
-
+def aboutus(request):
+    return render(request, 'aboutus.html')
 
 def contactus(request):
     user = request.user
@@ -35,11 +36,14 @@ def contactus(request):
     user_profile = Profile.objects.get(user = user_object)
     mobileno = user_profile.mobile_no
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-
-        ContactUser(user=user, email=email, profile=user_profile, mobileno = mobileno, title=title, description=description).save()
-
+        title = request.POST['title']
+        description = request.POST['description']
+        query = request.POST['query']
+        
+        ContactUser(user=user, email=email, profile=user_profile, query=query, mobileno = mobileno, title=title, description=description).save()
+        
+    else :
+        render(request, 'contactus.html')
     return render(request, 'contactus.html',{'user_profile':user_profile, "user_object" :user_object })
 
 
@@ -81,7 +85,7 @@ def orders(request):
      op = OrderPlaced.objects.filter(user=request.user)
      if request.user.is_authenticated:
       totalitem = len(Cart.objects.filter(user=request.user))
-     #print(op)
+      print(op)
      return render(request, 'orders.html', {'order_placed':op, 'totalitem':totalitem,})
 
 
@@ -124,7 +128,15 @@ def add_to_cart(request):
 def empty_cart(request):
     return render(request, 'emptycart.html')
 
-
+def buynow( request,**kwargs):
+    template_name = "productdetail.html"
+    user=request.user
+    # product = Product.objects.get(pk=pk)
+        # return render(request, 'productdetail.html', {'product': product})
+    prod_id = request.GET.get('prod_id')
+    product = Product.objects.get(id=prod_id)
+    Cart(user=user, product=product).save()
+    return render(request, template_name, {'product': product})
 
 def show_cart(request) :
     if request.user.is_authenticated :
@@ -206,23 +218,33 @@ def remove_cart(request):
         
         c.delete()
 
-        
+        cart = Cart.objects.filter(user=request.user)
         
         amount = 0.0
         shipping_amount = 10.0
         totalamount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == request.user]
         
-
+   #\/ Not in Project
+   #\/ 
+   #\/
+   #\/
+   #\/
+   #\/
     
         if cart_product == None :
             amount = 0.0
             shipping_amount = 00.0
             totalamount = 0.0
-            print(len(cart_product))
+            return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
         else :
 
-
+ #/\ Not in Project
+ #/\
+ #/\
+ #/\
+ #/\
+ #/\
     
          if cart_product :
             for p in cart_product : 
@@ -230,13 +252,20 @@ def remove_cart(request):
                 amount += tempamount
                 totalamount = amount + shipping_amount
                 
-        data = {
-                'amount' : amount,
-                'totalamount' : totalamount ,
+            return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+            #return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+         else :
+            return render(request,'emptycart.html')
+               # return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+        #  data = {
+        #         'amount' : amount,
+        #         'totalamount' : totalamount ,
                 
-                }
-            
-        return JsonResponse(data)
+        #         }
+         
+        #  return JsonResponse(data)
+        return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+        
 
 
 def product(request, data=None):
@@ -283,7 +312,7 @@ def profile(request):
             #     birthdate1 =  
              address = request.POST.get('address')
              city = request.POST.get('city')
-             #state = request.POST.get('state')
+             state = request.POST.get('state')
              pincode = request.POST.get('pincode')
              image = user_profile.profileimg
              #bio = request.POST['bio']
@@ -298,7 +327,7 @@ def profile(request):
 
              user_profile.address = address
              user_profile.city = city
-             #user_profile.state = state
+             user_profile.state = state
              user_profile.pincode = pincode
              user_profile.locality = locality
 
@@ -322,7 +351,7 @@ def profile(request):
 
         address = request.POST.get('address')
         city = request.POST.get('city')
-        #state = request.POST.get('state')
+        state = request.POST.get('state')
         pincode = request.POST.get('pincode')
 
         first_name = request.POST['firstname']
@@ -333,7 +362,7 @@ def profile(request):
  
         user_profile.address = address
         user_profile.city = city
-        #user_profile.state = state
+        user_profile.state = state
         user_profile.pincode = pincode
         user_profile.locality = locality
 
@@ -434,8 +463,13 @@ def logout(request):
 class ProductDetailView(View) :
     def get(self, request, pk):
         product = Product.objects.get(pk=pk)
+        print(pk)
         return render(request, 'productdetail.html', {'product': product})
 
+class ProductDetailBuyView(View) :
+    def get(self, request, pk):
+        product = Product.objects.get(pk=pk)
+        return render(request, 'productdetail.html', {'product': product})
 
 def success(request):
     return render(request,'success.html')
@@ -465,6 +499,8 @@ def verify(request, auth_token):
             messages.success(request, 'Profile updated and Verified')
             return redirect('signin')
         else :
+            messages.error(request, 'Authentication Error')
+            
             return redirect('/error')
     except Exception as e :
         print(e)

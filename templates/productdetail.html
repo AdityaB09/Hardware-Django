@@ -52,11 +52,11 @@
               <input class="form-control me-2" type="search" name='title' id='title' placeholder="Search for Products.." aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
-
+  
           <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
           
           {%if request.user.is_authenticated%}
-
+  
           <li class="nav-item dropdown" style="padding-right:3px; padding-left : 10px;">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,8 +72,8 @@
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
             </div>
         </li>
-
-
+  
+  
           <li class="nav-item">
             <a class="nav-link" href="{% url 'showcart' %}" style="font-size:17px;"><span class="badge bg-danger" >{{total_items}}</span>Cart</a>
           </li>
@@ -91,22 +91,29 @@
             </div> 
         </div>
     </nav>
+
+
 <div class="container my-5">
  <div class="row">
   <div class="col-sm-6 text-center align-self-center">
    <img src="{{product.product_image.url}}" alt="" class="img-fluid img-thumbnail">
   </div>
   <div class="col-sm-5 offset-sm-1">
-   <h2>Product Title: {{product.title}}</h2>
+   <h2>{{product.title}}</h2>
    <hr>
-   <p>{{product.description}}</p> <br>
+   <p> <b> Description :</b> {{product.description}}</p> <br>
+   <p><b> Manual :</b> {{product.description}}</p> <br>
    <h4>Rs. {{product.price}} 
     {% comment %} <small class="fw-light text-decoration-line-through">{{product.price}}</small> {% endcomment %}
    </h4> <br>
-   <form action='/add-to-cart' class='d-inline' >
+   <form action='/buy-now' class='d-inline' >
    <input type='hidden' name='prod_id' value={{product.id}} id='prod_id'>
-   <button type='submit' class='btn btn-primary shadow px-5 py-2'>Add to Cart</button>
+   <button type='submit' class='btn btn-primary shadow px-5 py-2'>Buy Now</button>
    </form> 
+   <form action='/add-to-cart' class='d-inline' method="get">
+    <input type='hidden' name='prod_id' value={{product.id}} id='prod_id'>
+    <button type='submit' class='btn btn-primary shadow px-5 py-2'>Add to Cart</button>
+    </form>
    
 
    {% comment %} <a href="{% url 'buy-now' %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}

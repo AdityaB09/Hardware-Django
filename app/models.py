@@ -79,7 +79,7 @@ class Product(models.Model) :
     title = models.CharField(max_length=100)
     price= models.FloatField()
     description = models.TextField()
-    category = models.CharField(choices = CATEGORY_CHOICES, max_length=2)
+    category = models.CharField(choices = CATEGORY_CHOICES, max_length=200)
     product_image =  models.ImageField(upload_to='productimg')
 
     def __str__(self):
@@ -116,13 +116,24 @@ class OrderPlaced(models.Model) :
 
     # def __str__(self):
     #     return str(self.id)
+    @property
+    def total_cost(self):
+      return ( self.quantity * self.product.price)
+
+HELP_CHOICES = (
+    ('Mobile','Mobile'),
+    ('Laptop','Laptop'),
+    ('Processor','Processor'),
+    ('Others','Others'),
+
+)
 
 class ContactUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     #product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
-
+    query = models.CharField(choices = HELP_CHOICES, max_length=200)
     mobileno = models.IntegerField()
     email = models.EmailField()
     title = models.CharField(max_length= 100)

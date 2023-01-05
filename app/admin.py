@@ -46,7 +46,7 @@ class OrderPlacedModelAdmin(admin.ModelAdmin):
 class ContactUserModelAdmin(admin.ModelAdmin):
     list_display = ["id","user", 
     'profile' ,
-   # 'product' ,
+    'query' ,
     'email' ,
     'title' ,
     'description' , 

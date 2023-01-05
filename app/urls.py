@@ -20,17 +20,23 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('product/', views.product, name='product'),
     path('product/<slug:data>', views.product, name='productdata'),
-    path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
+    path('product-detail/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
 
-    path('add-to-cart/', views.add_to_cart, name='add-to-cart'),  
+    path('/buy-now/product-detail/<int:pk>/', views.ProductDetailBuyView.as_view(), name='product-detail-buy'),
+    
+
+    path('buy-now/', views.add_to_cart, name='add-to-cart'),  
+    path('add-to-cart/', views.buynow, name='buynow'), 
+
     path('pluscart/',views.plus_cart, name='plus-cart'),   
     path('minuscart/', views.minus_cart, name='minus-cart'),
     path('removecart/', views.remove_cart, name='remove-cart'),
     path('cart/',views.show_cart, name='showcart'),
     # path('cart/emptycart/', views.empty_cart, name='emptycart'),
- 
+  
     path('search/', views.search, name='search'),
     path('contactus/', views.contactus, name='contactus'),
+    path('aboutus/', views.aboutus, name='aboutus'),
 
     path('address/', views.address, name='address'),
     path('orders/', views.orders, name='orders'),
