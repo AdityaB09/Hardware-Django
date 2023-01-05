@@ -252,18 +252,18 @@ def remove_cart(request):
                 amount += tempamount
                 totalamount = amount + shipping_amount
                 
-            return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
-            #return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
-         else :
-            return render(request,'emptycart.html')
+        #     return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+        #     #return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
+        #  else :
+        #     return render(request,'emptycart.html')
                # return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
-        #  data = {
-        #         'amount' : amount,
-        #         'totalamount' : totalamount ,
+         data = {
+                'amount' : amount,
+                'totalamount' : totalamount ,
                 
-        #         }
+                }
          
-        #  return JsonResponse(data)
+         return JsonResponse(data)
         return render(request, 'addtocart.html', {'carts': cart , 'totalamount' : totalamount, 'amount':amount, })
         
 
