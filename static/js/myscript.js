@@ -155,7 +155,7 @@ $('.minus-cart').click(function() {
    },})
    });
 
-   function refreshPage(){
+function refreshPage(){
 
 $('.remove-cart').ready(function () {
 
@@ -180,4 +180,5 @@ $('.remove-cart').ready(function () {
    });
 
 });
+
    }

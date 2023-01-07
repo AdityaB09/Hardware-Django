@@ -128,15 +128,18 @@ def add_to_cart(request):
 def empty_cart(request):
     return render(request, 'emptycart.html')
 
-def buynow( request,**kwargs):
+def buynow(request,*args, **kwargs):
     template_name = "productdetail.html"
+    
     user=request.user
-    # product = Product.objects.get(pk=pk)
+    
         # return render(request, 'productdetail.html', {'product': product})
     prod_id = request.GET.get('prod_id')
     product = Product.objects.get(id=prod_id)
     Cart(user=user, product=product).save()
-    return render(request, template_name, {'product': product})
+    #return render(request, template_name, {'product': product})
+    return redirect('/product')
+    
 
 def show_cart(request) :
     if request.user.is_authenticated :
@@ -463,8 +466,11 @@ def logout(request):
 class ProductDetailView(View) :
     def get(self, request, pk):
         product = Product.objects.get(pk=pk)
-        print(pk)
-        return render(request, 'productdetail.html', {'product': product})
+        item_already_in_cart = False
+        if request.user.is_authenticated :
+         totalitem = len(Cart.objects.filter(user=request.user))
+         item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
+        return render(request, 'productdetail.html', {'product': product, 'totalitem': totalitem, 'item_already_in_cart':item_already_in_cart,})
 
 class ProductDetailBuyView(View) :
     def get(self, request, pk):
