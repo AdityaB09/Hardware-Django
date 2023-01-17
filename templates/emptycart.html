@@ -26,75 +26,76 @@
     font-size: 15px;
 }
 </style>
-    <title>ShoppingX | {% block title %} {% endblock title %} </title>
+    <title>Empty Cart </title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-     <div class="container">
-       <a class="navbar-brand" href="/">ShoppingX</a>
-       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-       </button>
-       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-           <li class="nav-item">
-             <a class="nav-link active" aria-current="page" href="/">Home</a>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle text-white" href="#" id="electronicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               Electronics
-             </a>
-             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
-               <li><a class="dropdown-item" href="{% url 'product' %}">Mobile</a></li>
-               <li><a class="dropdown-item" href="#">Laptop</a></li>
-             </ul>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle text-white" href="#" id="fashionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               Fashion
-             </a>
-             <ul class="dropdown-menu" aria-labelledby="fashionDropdown">
-               <li><a class="dropdown-item" href="#">Top Wear</a></li>
-               <li><a class="dropdown-item" href="#">Bottom Wear</a></li>
-             </ul>
-           </li>
-         </ul>
-         <form class="d-flex">
-           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-           <button id='new' class="btn btn-warning" type="submit">{{ request.user.username | capfirst }}</button>
-         </form>
-         <div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">HardwareWebsite</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            {% if  request.user.is_authenticated %}
-           <li class="nav-item dropdown mx-2">
-              <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{request.user.username | capfirst}}
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                <li><a class="dropdown-item" href="{% url 'product' %}">Orders</a></li>
-                <li><a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a></li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-              </ul>
+            <li class="nav-item mt-1">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
-            <li class="nav-item mx-2">
-             
-             {% comment %} <a href="{% url 'showcart' %}" class="nav-link text-white"><span class="badge bg-danger">4</span>  {% endcomment %}
-              Cart </a>
+            <li class="nav-item mt-1">
+              <a class="nav-link" href="{% url 'product' %}">Product</a>
             </li>
-            {% else %}
-            <li class="nav-item mx-2">
-             <a href="{% url 'signin' %}" class="nav-link text-white">Login</a>
+            <li class="nav-item mt-1">
+               <a class="nav-link" href="{% url 'contactus' %}">About</a> 
+            </li> 
+            <li class="nav-item mt-1">
+              <a class="nav-link" href="{% url 'contactus' %}">Contact Us</a>
             </li>
-            <li class="nav-item mx-2">
-             <a href="{% url 'signup' %}" class="nav-link text-white">Registration</a>
-            </li>
-            {% endif %}
+          
+          <form class="d-flex mx-9" role="search" style="margin-left : 280px; padding-top:5px;" action='/search' method='get'>
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" name='title' id='title' placeholder="Search for Products.." aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+          
+          {%if request.user.is_authenticated%}
+
+          <li class="nav-item dropdown" style="padding-right:3px; padding-left : 10px;">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img width="30px" height="30px" src="{{user_profile.profileimg.url}}" style="position:relative;top:0px; border-radius:30px; border : 1px solid white; ">
+                {{request.user | capfirst}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'orders' %}">Orders</a>
+      
+                <a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </li>
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'showcart' %}" style="font-size:17px;"><span class="badge bg-danger" >{{total_items}}</span>Cart</a>
+          </li>
+        
+       {% else%}
+       <li class="nav-item" style="padding-right:10px; padding-left : 10px; padding-top:5px;">
+                <button class="btn btn-danger"  ><a  href='{% url 'signin' %}' style="color : white" >Login</a></button>
+       </li>
+       <li class="nav-item" style="padding-top:5px;">
+                <button class="btn btn-danger" > <a  href='{% url 'signup' %}' style="color : white">SignUp</a></button> 
+       </li>
+      
+              {% endif %}
           </ul>
-         </div>
-       </div>
-     </div>
+            </div> 
+        </div>
     </nav>
+
+    
 <div class="container my-5">
  <div class="row">
   <h3 class="text-center">You Have no products in Carts</h3>
@@ -106,7 +107,10 @@
  </div>
 </div>
 <footer class="container-fluid bg-dark text-center p-2 mt-5">
- 
+  <footer class="container">
+    {% comment %} <p class="float-right"><a href="#">Back to top</a></p> {% endcomment %}
+    <p>© 2020-2021 iCoder, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+  </footer>
   {% comment %} <img src="{% static 'app/images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> {% endcomment %}
 </footer> <!-- End Footer -->
 
